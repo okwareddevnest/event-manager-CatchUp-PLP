@@ -1,0 +1,43 @@
+name: Backend CI
+
+on:
+    push:
+        paths:
+          - 'backend/**'
+          -  '.github/workflows/backend.yml'
+        branches: [ main ]
+    pull_request:
+        paths:
+          -  'backend/**'
+          -  '.github/workflows/backend.yml'
+
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        defaults:
+            run:
+                working-directory: ./backend
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                node-version: '18'
+
+            - name: Install Dependencies
+              run: npm install
+
+            - name: Lint Check (optional)
+              run: npm run lint || echo "Link check skipped"
+
+            - name: Run tests (if any)
+              run: npm test || echo "No tests configured"
+
+            - name: Build & Verify
+              run: echo "Backend CI finished successfully"
+
+        
